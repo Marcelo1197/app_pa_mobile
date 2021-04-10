@@ -1,57 +1,49 @@
-//INFO: asi usamos onsen con html
+//INFO: conseguir el token de la app_podemosaprender con pantalla que pide usuario y clave 
 const { createElement} = React;
 const html = htm.bind(createElement);
 //A: definimos las funciones de react como requiere este runtime
 
-async function loginClave (usr, pass) {
+import Toolbar from './toolbar.js';
+
+async function loginClave (usr, pass) { //A: utilizamos la libreria rest-api-token para logearse en la API de Podemos Aprender
   const res = await apiLogin( usr, pass );
   return res;
 }
 
-//VER: https://github.com/developit/htm
-class Login extends React.Component {
+class Login extends React.Component { //A: componente react que genera  la vista donde se inicia sesion con usuario y clave
   constructor(props) {
     super(props);
-    this.state = { nombreusuario: "", contraseña: ""  };
+    this.state = { nombreusuario: "", contraseña: "" };
   }
 
   setNombre(value) {
     this.setState({nombreusuario: value});
-    console.log(this.nombreusuario)
   }
 
   setContraseña(value) {
     this.setState({contraseña: value});
-    console.log(this.contraseña)
   }
 
-  iniciarSesion() {
-    console.log(this.state)
-    loginClave(this.state.nombreusuario, this.state.contraseña)
-      .then((res) => {
-        if (res.detail === "No active account found with the given credentials") {
-          ons.notification.alert("Usuario o contraseña incorrecto!");
-        } else {
-          ons.notification.alert("Bienvenido!");  
-          //DBG:console.log(res)
-        }
-      }) 
-    
-  }
-
-  renderToolbar() {
-    return html`
-      <${Ons.Toolbar}>
-        <div className='center'>Iniciar sesion</div>
-      <//>
-    `;
+  async iniciarSesion() { //A: llama la funcion que utiliza la libreria api-rest-token y le pasa valores ingresados en el form. 
+  //Según respuesta notifica error o bienvenida
+    //MEJORA: lo pase a async/await en vez de promesas que es mas facil de leer
+    const res= await loginClave(this.state.nombreusuario, this.state.contraseña);
+    //DBG:console.log('iniciarSesion', this.state, res)
+    if ( this.state.contraseña == "" || this.state.nombreusuario == "" ) {
+      ons.notification.alert( "Debe completar los dos campos" );
+    } else if ( res.detail === "No active account found with the given credentials" ) {
+      ons.notification.alert( "Usuario o contraseña incorrecto!" );
+    } else {
+      ons.notification.alert( "Bienvenido!" );  
+    }
   }
 
   render() {
     return html`
-        <${Ons.Page} renderToolbar=${this.renderToolbar}
+      <${Ons.Page}
         style=${{ display: "inline" }}>
-        <section style=${{ textAlign: "center" }}>
+        <${Toolbar} titulo="Podemos Aprender" ><//>
+        <section style=${{ textAlign: "center", marginTop: "5em"}}>
           <p>
             <${Ons.Input}
               value=${this.state.nombreusuario}
@@ -76,11 +68,13 @@ class Login extends React.Component {
             />
           </p>
           <p>
-            <${Ons.Button} onClick=${this.iniciarSesion}>Entrar<//>
+            <${Ons.Button} onClick=${() => this.iniciarSesion()}>Entrar<//>
           </p>
         </section>
       <//>
-  `;
+    `;
+  //MEJORA: cambie onClick=${this.iniciarSesion} por onClick=${() => this.iniciarSesion()}
+  //Es algo ODIOSO de este javascript moderno, en la primera iniciarSesion es solo un valor y te va a decir que "this is undefined"
 	}
 }
 
