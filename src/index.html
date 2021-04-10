@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- S: dependencias -->
+    <!-- VER: https://onsen.io/v2/guide/react/ -->
+		<script src="https://unpkg.com/htm@2.2.1" crossorigin></script>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    
+    <!-- S: requeridos para pegar directamente los ejemplos de OnsenUi -->
+    <script crossorigin src="https://unpkg.com/prop-types@15.7.2/prop-types.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/create-react-class/15.7.0/create-react-class.min.js" integrity="sha512-iUrVckbmgrTPvnzV5Ajc1rONBq9N5PNCWZHiZ2/cLvFzLL0ZkDEEGYh4rnfeEqGZbePn2jpGf7ImvdqPRhj67A==" crossorigin="anonymous"></script>
+    <script>React.createClass= createReactClass;</script>
+    <!-- A: Tenemos compatibilidad con los ejemplos de onsen react -->
+    
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script crossorigin src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-onsenui@1.11.3/dist/react-onsenui.js"></script>
+    <!-- A: tenemos onsen ui -->
+    
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" integrity="sha256-BPfK9M5v34c2XP6p0cxVz1mUQLst0gTLk0mlc7kuodA=" crossorigin="anonymous">
+   <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js" integrity="sha256-yDc0eil8GjWFKqN1OSzHSVCiuGghTosZCcRje4tj7iQ=" crossorigin="anonymous"></script> 
+   <script src="https://cdn.jsdelivr.net/npm/react-leaflet@3.1.0/umd/react-leaflet.js" integrity="sha256-ggk/D+mSW3BizsHDG6DzFsCRQpcdXZ5UXVUO4HnAT5o=" crossorigin="anonymous"></script>
+    <!-- A: tenemos Mapas Leaflet con React -->
+    
+    <!--
+       OjO:SEC:permitir todo pero todo!
+        -->
+        <meta http-equiv="Content-Security-Policy" content="default-src * gap: data: blob: filesystem: about: ws: wss: 'unsafe-inline' 'unsafe-eval'; script-src * file: cdvfile: data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src * data: blob: 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src * data: blob: ; style-src * data: blob: 'unsafe-inline'; font-src * data: blob: 'unsafe-inline';">
+
+    <script src="file:///android_asset/www/cordova.js"></script>
+    <!-- S: tu app -->
+    <title>PodemosAprender</title>
+    <link rel="stylesheet" href="style.css">
+		<script src="index.js" type="module"></script>
+		<!-- A: cargue y lance mi aplicacion -->
+  </head>  
+  <body>
+    <!-- VER: https://onsen.io/v2/guide/react/#react -->
+    <div id="App"></div>
+  </body>
+</html>
