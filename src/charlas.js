@@ -4,6 +4,7 @@ const html = htm.bind(createElement);
 //A: definimos las funciones de react como requiere este runtime
 
 import Toolbar from './toolbar.js';
+import Tarjeta from './tarjeta.js';
 
 async function leerCharlas () { //A: utilizamos la libreria rest-api-token traer las charlass
     const res = await fetchConToken('https://si.podemosaprender.org/api/charla/');
@@ -29,14 +30,13 @@ class Charlas extends React.Component {
     render() {
         return html`
             <${Ons.Page}
-                style=${{ display: "inline" }}>
+                style=${{ display: "inline"}}>
                 <${Toolbar} titulo="Charlas" ><//>
-                <${Ons.List}>
+                <${Ons.List} style=${{ marginTop: "3em"}}>
                     ${this.state.charlas.map(( //TODO: gusanito cuando esta cargando las charlas
                         char
                         ) => (
-                            html`<${Ons.ListItem} key=${char.pk}>
-                                ${char.titulo}
+                            html`<${Tarjeta} tarjeta=${char} key=${char.pk}>
                             <//>`
                         ))
                     }

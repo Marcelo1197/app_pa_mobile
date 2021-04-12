@@ -41,7 +41,7 @@ class Login extends React.Component { //A: componente react que genera  la vista
     }
   }
 
-  render() {
+  render() { //TODO: poner estilos en style.css
     return html`
       <${Ons.Page}
         style=${{ display: "inline" }}>
