@@ -5,6 +5,8 @@ const html = htm.bind(createElement);
 
 import Toolbar from './toolbar.js';
 
+var idUsuarioLogeado = null;
+
 async function loginClave (usr, pass) { //A: utilizamos la libreria rest-api-token para logearse en la API de Podemos Aprender
   const res = await apiLogin( usr, pass );
   return res;
@@ -34,7 +36,8 @@ class Login extends React.Component { //A: componente react que genera  la vista
     } else if ( res.detail === "No active account found with the given credentials" ) {
       ons.notification.alert( "Usuario o contraseña incorrecto!" );
     } else {
-      ons.notification.alert( "Bienvenido!" );  
+      idUsuarioLogeado = 1;//A: usuario logeado correctamente
+      this.props.cuandoOk(idUsuarioLogeado); //A: llama a cuandoOk en App para actualizar componente y definir que tab se muestra
     }
   }
 
