@@ -8,7 +8,7 @@ import TarjetaTexto from "./tarjetaTexto.js";
 
 async function leerTextos() {
   //A: utilizamos la libreria rest-api-token traer las charlass
-  const res = await fetch("https://si.podemosaprender.org/api/charla/9");
+  const res = await fetch("https://si.podemosaprender.org/api/charla/21");
   return res;
 }
 
@@ -28,7 +28,7 @@ class Charla extends React.Component {
   render() {
     return html`
       <${Ons.Page} style=${{ display: "inline" }}>
-        <${Toolbar} titulo="Textos"><//>
+        <${Toolbar} titulo="Titulo charla"><//>
         <${Ons.List} style=${{ marginTop: "3em" }}>
           ${this.state.textos.map(
             (
