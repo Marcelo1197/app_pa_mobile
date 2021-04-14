@@ -7,6 +7,10 @@ class TarjetaTexto extends React.Component {
     this.state = { texto: this.props.textoCharla };
   }
 
+  createMarkup () { //A: convierte markdown a html
+    return {__html: marked(this.state.texto.texto)};
+  }
+
   componentDidUpdate(prevProps) {
     //A: Si cambia por algún motivo el props que se le pasa a tarjeta, se actualiza el contenido
     if (this.props.textoCharla !== prevProps.textoCharla) {
@@ -21,10 +25,10 @@ class TarjetaTexto extends React.Component {
       <${Ons.Card}>
         <${Ons.ListItem} className="post-button-bar" modifier="nodivider">
           <div>
-            <h4>Autor: ${this.state.texto.de_quien.username}</h4>
+            <h4><b>Autor: ${this.state.texto.de_quien.username}</b></h4>
           </div>
           <div className="list-item__title">
-            <b>${this.state.texto.texto}</b>
+            <p dangerouslySetInnerHTML=${this.createMarkup()}></p>
           </div>
           <div>
             <p>Creado: ${this.state.texto.fh_creado}</p>

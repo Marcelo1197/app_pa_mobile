@@ -17,8 +17,7 @@ class App extends React.Component {
 
   renderTabs() {
     // A: contiene las tabs que se van a mostrar en Ons.Tabbar
-    //A: El return iba sin ` `. El formato htm ` ` solo lo utilizo dentro de content y tab, porque es ahí donde quiero insertar
-    //los elementos a renderizar.
+    //A: El return va sin ` `. El formato htm ` ` solo se utiliza dentro de content y tab
     return [
       {
         content: html`<${Home} usuarioId="${this.state.usuarioId}" />`,
@@ -31,9 +30,9 @@ class App extends React.Component {
   render() {
     return html`
       <${Ons.Page}>
-        ${this.state.usuarioId == null
+        ${this.state.usuarioId == null //A: si usuarioId no esta creada renderiza Login, cuando login OK se crea usuarioId y se ejecuta la otra parte del condicional 
           ? html`<${Login} cuandoOk=${this.cuandoLoginOk.bind(this)}><//>`
-          : html`<${Ons.Tabbar}
+          : html`<${Ons.Tabbar} 
               swipeable=${true}
               position="auto"
               index=${this.state.index}
