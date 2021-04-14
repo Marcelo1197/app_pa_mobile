@@ -2,7 +2,7 @@ const { createElement } = React;
 const html = htm.bind(createElement);
 
 import Login from "./components/login.js";
-import Charlas from "./components/charlas.js";
+import Home from "./components/Home/home.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class App extends React.Component {
     //los elementos a renderizar.
     return [
       {
-        content: html`<${Charlas} usuarioId="${this.state.usuarioId}" />`,
+        content: html`<${Home} usuarioId="${this.state.usuarioId}" />`,
         tab: html`<${Ons.Tab} label="Charlas" icon="md-view-day" />`,
       },
     ];

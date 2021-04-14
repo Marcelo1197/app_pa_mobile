@@ -20,17 +20,16 @@ class Charla extends React.Component {
   }
 
   componentDidMount() {
-    //A: En vez de 21 debería ir this.props.idCharla que recibiríamos como una prop
-    const res = leerTextos(21)
+    const res = leerTextos(this.props.idCharla)
       .then((text) => text.json())
       .then((text) => this.setState({ textos: text.textos }));
-    //DBG:console.log(this.state);
+    //DBG:console.log(res);
   }
 
   render() {
     return html`
       <${Ons.Page} style=${{ display: "inline" }}>
-        <${Toolbar} titulo="Titulo charla"><//>
+
         <${Ons.List} style=${{ marginTop: "3em" }}>
           ${this.state.textos.map(
             (
