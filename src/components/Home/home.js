@@ -13,6 +13,7 @@ class Home extends React.Component {
     charlas: [],
   };
 
+  //A: Traigo las charlas de la API en formato json y seteo mi state con el array de objetos (charlas) que obtengo
   componentDidMount() {
     leerCharlas()
       .then((charlas) => charlas.json())
@@ -35,6 +36,7 @@ class Home extends React.Component {
     <//>`;
   };
 
+  //A: Cambio a español el diálogo que nos aparece al apretar el botón volver
   handleClick = (navigator) => {
     ons.notification.confirm("¿Volver al inicio?").then((response) => {
       if (response === 1) {
@@ -43,6 +45,7 @@ class Home extends React.Component {
     });
   };
 
+  //A: Agrego un parámetro extra, una charla, para poder mostrar el pk de esa charla cuando clickeemos en ella
   pushPage = (navigator, charla) => {
     navigator.pushPage({
       title: `Charla ${charla.pk}`,
@@ -52,6 +55,7 @@ class Home extends React.Component {
     index++;
   };
 
+  //A: Mapeo mi array de charlas y devuelvo cada una como un Ons.ListItem dentro de una Ons.List
   renderPage = (route, navigator) => {
     return html`<${Ons.Page}
       key=${route.title}

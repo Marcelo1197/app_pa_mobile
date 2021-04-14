@@ -6,9 +6,10 @@ const html = htm.bind(createElement);
 import Toolbar from "../toolbar.js";
 import TarjetaTexto from "./tarjetaTexto.js";
 
-async function leerTextos() {
-  //A: utilizamos la libreria rest-api-token traer las charlass
-  const res = await fetch("https://si.podemosaprender.org/api/charla/21");
+async function leerTextos(idCharla) {
+  const res = await fetch(
+    `https://si.podemosaprender.org/api/charla/${idCharla}`
+  );
   return res;
 }
 
@@ -19,7 +20,8 @@ class Charla extends React.Component {
   }
 
   componentDidMount() {
-    const res = leerTextos()
+    //A: En vez de 21 debería ir this.props.idCharla que recibiríamos como una prop
+    const res = leerTextos(21)
       .then((text) => text.json())
       .then((text) => this.setState({ textos: text.textos }));
     //DBG:console.log(this.state);
