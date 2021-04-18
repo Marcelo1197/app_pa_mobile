@@ -86,7 +86,7 @@ class Home extends React.Component {
         : html`<${Ons.Page} 
             renderToolbar=${this.renderToolbar.bind(this, route, navigator)}
             >
-                <${Charla} idCharla=${this.state.idCharla}><//>
+                <${Charla} idCharla=${this.state.idCharla} charlas=${this.state.charlas}><//>
             <//>`
       }
     `;

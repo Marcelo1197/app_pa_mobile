@@ -106,3 +106,4 @@ async function fetchConToken(url, opciones) { //U: agrega el token a un fetch
 //TEST: fetchConToken('https://si.podemosaprender.org/api/token/user/').then(x=>x.json()).then(console.log)
 // Object { user: "mauriciocap", auth: "eyJ0eXA..." }
 
+//#########################################################################################################

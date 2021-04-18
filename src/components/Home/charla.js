@@ -20,9 +20,9 @@ class Charla extends React.Component {
 
   componentDidMount() { //A: cuando componente montado trae textos y los setea al state
     const res = leerTextos(this.props.idCharla)
-      .then((text) => text.json())
-      .then((text) => this.setState({ textos: text.textos }));
-    //DBG:console.log(res);
+      .then((txt) => txt.json())
+      .then((txt) => this.setState({ textos: txt.textos }));
+    //DBG:console.log(this.props.charlas);
   }
 
   render() {
@@ -32,7 +32,7 @@ class Charla extends React.Component {
           ${this.state.textos.map(
             ( //TODO: gusanito cuando esta cargando las charlas
               txt
-            ) => html`<${TarjetaTexto} textoCharla=${txt}> <//>`
+            ) => html`<${TarjetaTexto} textoCharla=${txt} > <//>`
           )}
         <//>
       <//>
