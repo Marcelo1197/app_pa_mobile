@@ -15,6 +15,7 @@ class Home extends React.Component {
   };
 
   componentDidMount() {
+    //DBG: console.info("home.js/montaje");
     const obtenerYfiltrarCharlas = async () => {
       const res = await leerCharlas();
       const charlas = await res.json();
@@ -22,6 +23,7 @@ class Home extends React.Component {
         //A: filtra charlas que comienzan con '#casual'
         (charla) => !charla.titulo.startsWith("#casual")
       );
+      //DBG: console.info("home.js/obtenerYfiltrarCharlas ejecutado");
       this.setState({ charlas: charlasFilt });
     };
     obtenerYfiltrarCharlas();
@@ -58,6 +60,15 @@ class Home extends React.Component {
     });
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props !== prevProps) {
+      //DBG: console.info("Home.js/actualizacion: cambiaron props");
+    }
+    if (this.state !== prevState) {
+      //DBG: console.info("Home.js/actualizacion: cambio state");
+    }
+  }
+
   //A: Mapeo mi array de charlas y devuelvo cada una como un Ons.ListItem dentro de una Ons.List
   renderPage = (route, navigator) => {
     return html`
@@ -83,10 +94,7 @@ class Home extends React.Component {
         : html`<${Ons.Page}
             renderToolbar=${this.renderToolbar.bind(this, route, navigator)}
           >
-            <${Charla}
-              idCharla=${this.state.idCharla}
-              charlas=${this.state.charlas}
-            ><//>
+            <${Charla} idCharla=${this.state.idCharla}><//>
           <//>`}
     `;
   };

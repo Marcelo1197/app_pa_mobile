@@ -5,7 +5,7 @@ const html = htm.bind(createElement);
 
 import TarjetaTexto from "./tarjetaTexto.js";
 
-async function leerTextos(idCharla) {
+async function leerTextosCharla(idCharla) {
   //A: trae todos los textos de una charla
   const res = await fetchConToken(
     //A: funcion definida en auth-servicio para acceder a la API con un token
@@ -15,10 +15,7 @@ async function leerTextos(idCharla) {
 }
 
 class Charla extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { listaTextos: [] };
-  }
+  state = { listaTextos: [] };
 
   hashtagsALinks(listaTextos) {
     let textosCharla = listaTextos;
@@ -38,21 +35,28 @@ class Charla extends React.Component {
     //A: agrego la class "hashtagLink" para referenciarla en agregarOnClickHashtags()
     return `<a href="#" class="hashtagLink"> ${hashtag} </a>`;
   }
-  /*
-   */
 
   componentDidMount() {
     //A: cuando componente montado trae textos y los setea al state
-    console.log("componente charla montado");
+    //DBG: console.log("charla.js/montaje");
     const obtenerTextosDeCharla = async () => {
-      const res = await leerTextos(this.props.idCharla);
+      const res = await leerTextosCharla(this.props.idCharla);
       const data = await res.json();
+      //A: Paso como parámetro la lista de textos de la charla correspondiente a funcion hashtagsALinks()
       const textosConHashtagsLinks = this.hashtagsALinks(data.textos);
+      //DBG: console.info("charla.js/obtenerTextosDeCharla ejecutado");
       this.setState({ listaTextos: textosConHashtagsLinks });
     };
     obtenerTextosDeCharla();
   }
-
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props !== prevProps) {
+      //DBG: console.info("charla.js/actualizacion: cambiaron props");
+    }
+    if (this.state !== prevState) {
+      //DBG: console.info("charla.js/actualizacion: cambiaro state");
+    }
+  }
   render() {
     return html`
       <${Ons.Page} style=${{ display: "inline" }}>
@@ -60,7 +64,8 @@ class Charla extends React.Component {
           ${this.state.listaTextos.length === 0
             ? "Cargando..."
             : this.state.listaTextos.map(
-                (txt) => html`<${TarjetaTexto} textoCharla=${txt}> <//>`
+                (txt) =>
+                  html`<${TarjetaTexto} key=${txt.pk} textoCharla=${txt}> <//>`
               )}
         <//>
       <//>
