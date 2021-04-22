@@ -5,13 +5,7 @@ const html = htm.bind(createElement);
 
 import Toolbar from "./toolbar.js";
 
-var idUsuarioLogeado = null;
 
-async function loginClave(usr, pass) {
-  //A: utilizamos la libreria rest-api-token para logearse en la API de Podemos Aprender
-  const res = await apiLogin(usr, pass);
-  return res;
-}
 
 class Login extends React.Component {
   //A: componente react que genera  la vista donde se inicia sesion con usuario y clave
@@ -29,24 +23,25 @@ class Login extends React.Component {
   }
 
   async iniciarSesion() {
-    //A: llama la funcion que utiliza la libreria api-rest-token y le pasa valores ingresados en el form.
+    //U: llama la funcion que utiliza la libreria api-rest-token y le pasa valores ingresados en el form.
     //Según respuesta notifica error o bienvenida
-    //MEJORA: lo pase a async/await en vez de promesas que es mas facil de leer
-    const res = await loginClave(
-      this.state.nombreusuario,
-      this.state.contraseña
-    );
-    //DBG:console.log('iniciarSesion', this.state, res)
     if (this.state.contraseña == "" || this.state.nombreusuario == "") {
       ons.notification.alert("Debe completar los dos campos");
-    } else if (
-      res.detail === "No active account found with the given credentials"
-    ) {
-      ons.notification.alert("Usuario o contraseña incorrecto!");
-    } else {
-      idUsuarioLogeado = 1; //A: usuario logeado correctamente
-      this.props.cuandoOk(idUsuarioLogeado); //A: llama a cuandoOk en App para actualizar componente y definir que tab se muestra
     }
+		else {
+			const res = await apiLogin(
+				this.state.nombreusuario,
+				this.state.contraseña
+			);
+    //DBG:console.log('iniciarSesion', this.state, res)
+			if (
+				res.detail === "No active account found with the given credentials"
+			) {
+				ons.notification.alert("Usuario o contraseña incorrecto!");
+			} else {
+				this.props.cuandoOk(1); //A: llama a cuandoOk en App para actualizar componente y definir que tab se muestra
+			}
+		}
   }
 
   render() {
@@ -84,8 +79,6 @@ class Login extends React.Component {
         </section>
       <//>
     `;
-    //MEJORA: cambie onClick=${this.iniciarSesion} por onClick=${() => this.iniciarSesion()}
-    //Es algo ODIOSO de este javascript moderno, en la primera iniciarSesion es solo un valor y te va a decir que "this is undefined"
   }
 }
 

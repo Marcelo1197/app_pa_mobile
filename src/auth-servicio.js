@@ -5,8 +5,9 @@
 PODEMOS_APRENDER_API_PFX= 'https://si.podemosaprender.org/api/'
 
 //S: guardar el token aunque se cierre la app o pagina
-function tokenGuardar(tokens) { //U: guarda los tokens aunque cargue de nuevo la pagina/app
+function tokenGuardar(tokens, usuario) { //U: guarda los tokens aunque cargue de nuevo la pagina/app
   localStorage.tokens= JSON.stringify(tokens);
+  localStorage.usuario= usuario;
 }
 
 function tokenLeer() { //U: lee los tokens que tenia guardados
@@ -21,8 +22,13 @@ function tokenLeer() { //U: lee los tokens que tenia guardados
   return result;
 }
 
+function usuarioLeer() { //U: lee el usuario que tenia guardado
+	return localStorage.usuario;
+}
+
 function tokenBorrar() { //U: ej para cerrar sesion en navegador publico
   localStorage.tokens= null;
+  localStorage.usuario= null;
   //TODO: ademas deberia invalidarlo en el servidor
 }
 
@@ -76,7 +82,7 @@ async function apiTokenRenovar(tokenRefresh) { //U: null o por que no sirve
 //S: integro acceso a la api y guardar localmente
 async function apiLogin(usr, pass) {
   const tok= await apiTokenConseguir(usr,pass);
-  tokenGuardar(tok);
+  tokenGuardar(tok, usr);
   return tok;
 }
 

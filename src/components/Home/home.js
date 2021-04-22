@@ -53,6 +53,7 @@ class Home extends React.Component {
 
   //A: Agrego un parámetro extra 'charla', para setear pk y pasarlo por props a componente Charla
   pushPage = (navigator, charla) => {
+		console.log("pushPage",charla);
     this.setState({ idCharla: charla.pk });
     navigator.pushPage({
       title: `${charla.titulo}`,
@@ -71,6 +72,7 @@ class Home extends React.Component {
 
   //A: Mapeo mi array de charlas y devuelvo cada una como un Ons.ListItem dentro de una Ons.List
   renderPage = (route, navigator) => {
+		console.log("renderPage ",this.state.idCharla);
     return html`
       ${this.state.idCharla == null //A: condicional para mostrar la lista de charlas si idCharla es null, sino muestra textos de la charla que seleccionada
         ? html`<${Ons.Page}

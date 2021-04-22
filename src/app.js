@@ -4,6 +4,7 @@ const html = htm.bind(createElement);
 import Login from "./components/login.js";
 import Home from "./components/Home/home.js";
 
+const NECESITA_LOGIN= {}; //U: un valor UNICO para no confundir con ningun otro
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -11,12 +12,10 @@ class App extends React.Component {
   }
 
   cuandoLoginOk(usuarioId) {
-    //A: cuando el login  es correcto setea index y usuarioId para actualizar componente y definir que tab se va a mostrar
     this.setState({ index: 0, usuarioId });
   }
 
-  renderTabs() {
-    // A: contiene las tabs que se van a mostrar en Ons.Tabbar
+  renderTabs() { //U: lista de tabs que se van a mostrar en Ons.Tabbar
     //A: El return va sin ` `. El formato htm ` ` solo se utiliza dentro de content y tab
     return [
       {
@@ -25,27 +24,44 @@ class App extends React.Component {
       },
     ];
   }
-  //OK: Corregí el uso de la sintaxis HTM, anteriormente las backsticks ` ` encerraban a todo el código
-  //incluido su parte lógica, por lo cual no se ejecutaba el condicional que dependía de this.state.usuarioId == null
+
   render() {
-    return html`
-      <${Ons.Page}>
-        ${this.state.usuarioId == null //A: si usuarioId no esta creada renderiza Login, cuando login OK se crea usuarioId y se ejecuta la otra parte del condicional 
-          ? html`<${Login} cuandoOk=${this.cuandoLoginOk.bind(this)}><//>`
-          : html`<${Ons.Tabbar} 
-              swipeable=${true}
-              position="auto"
-              index=${this.state.index}
-              onPreChange=${(event) => {
-                if (event.index != this.state.index) {
-                  this.setState({ index: event.index });
-                }
-              }}
-              renderTabs=${() => this.renderTabs()}
-            >
-            <//>`}
-      <//>
-    `;
+		if (this.state.usuarioId == null) { //A: primera vez
+			apiNecesitoLoginP() //A: averiguar si token sirve o necesitamos login (async)
+				.then( necesitoLogin => this.setState({ 
+						usuarioId: necesitoLogin ? NECESITA_LOGIN : usuarioLeer()
+					}));
+			//A: mientras, mostrar cartelito de espera
+			return html`
+      	<${Ons.Page}>
+				Verificando credenciales
+				<//>
+				`;
+		}
+		else if (this.state.usuarioId == NECESITA_LOGIN) {
+			return html`
+				<${Ons.Page}>
+					 <${Login} cuandoOk=${this.cuandoLoginOk.bind(this)}><//>
+				<//>
+				`;
+		}
+		else {
+			return html`
+				<${Ons.Page}>
+					<${Ons.Tabbar} 
+							swipeable=${true}
+							position="auto"
+							index=${this.state.index}
+							onPreChange=${(event) => {
+								if (event.index != this.state.index) {
+									this.setState({ index: event.index });
+								}
+							}}
+							renderTabs=${() => this.renderTabs()}
+						>
+						<//>
+				<//>`;
+		}
   }
 }
 
