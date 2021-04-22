@@ -5,8 +5,8 @@ const html = htm.bind(createElement);
 
 import TarjetaTexto from "./tarjetaTexto.js";
 
-async function leerTextosCharla(idCharla) {
-  //A: trae todos los textos de una charla
+async function fetch_textosCharla(idCharla) { //U: trae todos los textos de una charla
+	console.log("fetch_textosCharla", idCharla);
   const res = await fetchConToken(
     //A: funcion definida en auth-servicio para acceder a la API con un token
     `https://si.podemosaprender.org/api/charla/${idCharla}`
@@ -14,49 +14,44 @@ async function leerTextosCharla(idCharla) {
   return res;
 }
 
-class Charla extends React.Component {
-  state = { listaTextos: [] };
+function linkParaHashtag(hashtag) { 
+	return `<a href="#" class="hashtagLink"> ${hashtag} </a>`;
+	//A: agrego la class "hashtagLink" para referenciarla en agregarOnClickHashtags()
+}
 
-  hashtagsALinks(listaTextos) {
-    let textosCharla = listaTextos;
+function hashtagsALinks(textosCharla) {
     //A: Recorro cada texto de la charla renderizada
     //Y reemplazo cada '#tag' por el mismo '#tag' entre etiquetas <a></a> para poder clickearlos
     textosCharla.forEach((textoItem) => {
       textoItem.texto = textoItem.texto.replace(
         /#([A-Za-z0-9_]+)/g,
-        this.creaLink
+        linkParaHashtag
       );
     });
     //DBG:console.info(textosCharla);
     return textosCharla;
-  }
+}
 
-  creaLink(hashtag) {
-    //A: agrego la class "hashtagLink" para referenciarla en agregarOnClickHashtags()
-    return `<a href="#" class="hashtagLink"> ${hashtag} </a>`;
-  }
+async function obtenerTextosDeCharla(charla) {
+	const res = await fetch_textosCharla(charla);
+	const data = await res.json();
+	//A: Paso como parámetro la lista de textos de la charla correspondiente a funcion hashtagsALinks()
+	const textosConHashtagsLinks = hashtagsALinks(data.textos);
+	//DBG: console.info("charla.js/obtenerTextosDeCharla ejecutado");
+	return textosConHashtagsLinks;	
+};
+
+class Charla extends React.Component {
+  state = { listaTextos: [] };
 
   componentDidMount() {
     //A: cuando componente montado trae textos y los setea al state
-    //DBG: console.log("charla.js/montaje");
-    const obtenerTextosDeCharla = async () => {
-      const res = await leerTextosCharla(this.props.idCharla);
-      const data = await res.json();
-      //A: Paso como parámetro la lista de textos de la charla correspondiente a funcion hashtagsALinks()
-      const textosConHashtagsLinks = this.hashtagsALinks(data.textos);
-      //DBG: console.info("charla.js/obtenerTextosDeCharla ejecutado");
-      this.setState({ listaTextos: textosConHashtagsLinks });
-    };
-    obtenerTextosDeCharla();
+    //DBG: 
+		console.log("charla.js/montaje", this.props);
+    obtenerTextosDeCharla(this.props.idCharla)
+			.then(listaTextos => this.setState({ listaTextos }));
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props !== prevProps) {
-      //DBG: console.info("charla.js/actualizacion: cambiaron props");
-    }
-    if (this.state !== prevState) {
-      //DBG: console.info("charla.js/actualizacion: cambiaro state");
-    }
-  }
+
   render() {
     return html`
       <${Ons.Page} style=${{ display: "inline" }}>
