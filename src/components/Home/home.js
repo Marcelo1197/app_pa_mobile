@@ -90,6 +90,7 @@ class Home extends React.Component {
 			const idCharla= route.charla_pk; //A: usar la de la RUTA, no state
 			return html`
 				<${Ons.Page}
+				 	key=${route.title}
 					renderToolbar=${this.renderToolbar.bind(this, route, navigator)}
 				>
 					<${Charla} idCharla=${idCharla}><//>
@@ -100,6 +101,7 @@ class Home extends React.Component {
 
 	render() {
 		return html`<${Ons.Navigator}
+			key="navigator"
 			swipeable
 			renderPage=${this.renderPage}
 			initialRoute=${{

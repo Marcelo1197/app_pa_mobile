@@ -19,8 +19,8 @@ class App extends React.Component {
     //A: El return va sin ` `. El formato htm ` ` solo se utiliza dentro de content y tab
     return [
       {
-        content: html`<${Home} usuarioId="${this.state.usuarioId}" />`,
-        tab: html`<${Ons.Tab} label="Charlas" icon="md-view-day" />`,
+        content: html`<${Home} key="home-page" usuarioId="${this.state.usuarioId}" />`,
+        tab: html`<${Ons.Tab} key="home-tab" label="Charlas" icon="md-view-day" />`,
       },
     ];
   }
