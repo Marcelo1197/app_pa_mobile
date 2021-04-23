@@ -7,7 +7,7 @@ class Toolbar extends React.Component {
         this.state =  { titulo: props.titulo }; //le paso el titulo del toolbar por props desde el componente que lo usa
     }
 
-    render() {
+    render() { //TODO: poner estilos en style.css y centrar titulo
         return html`
         <${Ons.Toolbar}
             style=${{ backgroundColor: "gray" }}
