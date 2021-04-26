@@ -5,8 +5,9 @@ const html = htm.bind(createElement);
 
 import TarjetaTexto from "./tarjetaTexto.js";
 
-async function fetch_textosCharla(idCharla) { //U: trae todos los textos de una charla
-	console.log("fetch_textosCharla", idCharla);
+async function fetch_textosCharla(idCharla) {
+  //U: trae todos los textos de una charla
+  console.log("fetch_textosCharla", idCharla);
   const res = await fetchConToken(
     //A: funcion definida en auth-servicio para acceder a la API con un token
     `https://si.podemosaprender.org/api/charla/${idCharla}`
@@ -14,42 +15,43 @@ async function fetch_textosCharla(idCharla) { //U: trae todos los textos de una 
   return res;
 }
 
-function linkParaHashtag(hashtag) { 
-	return `<a href="#" class="hashtagLink"> ${hashtag} </a>`;
-	//A: agrego la class "hashtagLink" para referenciarla en agregarOnClickHashtags()
+function linkParaHashtag(hashtag) {
+  return `<a href="#" class="hashtagLink">${hashtag}</a>`;
+  //A: agrego la class "hashtagLink" para referenciarla en agregarOnClickHashtags()
 }
 
 function hashtagsALinks(textosCharla) {
-    //A: Recorro cada texto de la charla renderizada
-    //Y reemplazo cada '#tag' por el mismo '#tag' entre etiquetas <a></a> para poder clickearlos
-    textosCharla.forEach((textoItem) => {
-      textoItem.texto = textoItem.texto.replace(
-        /#([A-Za-z0-9_]+)/g,
-        linkParaHashtag
-      );
-    });
-    //DBG:console.info(textosCharla);
-    return textosCharla;
+  //A: Recorro cada texto de la charla renderizada
+  //Y reemplazo cada '#tag' por el mismo '#tag' entre etiquetas <a></a> para poder clickearlos
+  textosCharla.forEach((textoItem) => {
+    textoItem.texto = textoItem.texto.replace(
+      /#([A-Za-z0-9_]+)/g,
+      linkParaHashtag
+    );
+  });
+  //DBG:console.info(textosCharla);
+  return textosCharla;
 }
 
 async function obtenerTextosDeCharla(charla) {
-	const res = await fetch_textosCharla(charla);
-	const data = await res.json();
-	//A: Paso como parámetro la lista de textos de la charla correspondiente a funcion hashtagsALinks()
-	const textosConHashtagsLinks = hashtagsALinks(data.textos);
-	//DBG: console.info("charla.js/obtenerTextosDeCharla ejecutado");
-	return textosConHashtagsLinks;	
-};
+  const res = await fetch_textosCharla(charla);
+  const data = await res.json();
+  //A: Paso como parámetro la lista de textos de la charla correspondiente a funcion hashtagsALinks()
+  const textosConHashtagsLinks = hashtagsALinks(data.textos);
+  //DBG: console.info("charla.js/obtenerTextosDeCharla ejecutado");
+  return textosConHashtagsLinks;
+}
 
 class Charla extends React.Component {
   state = { listaTextos: [] };
 
   componentDidMount() {
     //A: cuando componente montado trae textos y los setea al state
-    //DBG: 
-		console.log("charla.js/montaje", this.props);
-    obtenerTextosDeCharla(this.props.idCharla)
-			.then(listaTextos => this.setState({ listaTextos }));
+    //DBG:
+    console.log("charla.js/montaje", this.props);
+    obtenerTextosDeCharla(this.props.idCharla).then((listaTextos) =>
+      this.setState({ listaTextos })
+    );
   }
 
   render() {
@@ -60,7 +62,12 @@ class Charla extends React.Component {
             ? "Cargando..."
             : this.state.listaTextos.map(
                 (txt) =>
-                  html`<${TarjetaTexto} key=${txt.pk} textoCharla=${txt}> <//>`
+                  html`<${TarjetaTexto}
+                    key=${txt.pk}
+                    textoCharla=${txt}
+                    tarjetaTextoProps=${this.props.tarjetaTextoProps}
+                  >
+                  <//>`
               )}
         <//>
       <//>
