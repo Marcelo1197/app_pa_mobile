@@ -15,6 +15,49 @@ async function filtrarCharlaPorNombre(nombreCharla, charlasFetch) {
   return charlaMatcheada[0];
 }
 
+function traerTodosLosHashtags() {
+  //A: Traigo todos los elementos <a> que tengan la clase hashtagLink. Me devuelve una HTMLCollection de elementos <a>
+  let listaHashtags = document.getElementsByClassName("hashtagLink");
+  //A: Transformo la HTMLCollection a un array
+  listaHashtags = [...listaHashtags];
+  return listaHashtags;
+}
+
+function obtenerObjetosCharlas(charlasTraidasApi, listaHashtags) {
+  //A: Mapeo cada #tituloHashtag de la lista de titulos que recibo como parametro
+  let charlasMatcheadas = listaHashtags.map((tituloHashtag) => {
+    let charlaMatcheada;
+    //A: A su vez en cada mapeo de un titulo, recorro las charlasTraidasApi que recibomo como parametro
+    charlasTraidasApi.forEach((charla) => {
+      if (charla.titulo == tituloHashtag) {
+        //A: Y en cada recorrida valido si el titulo de la charlaTraidaApi coincide con el titulo de mi listaHashtags mapeado
+        //Si coincide lo asigno a mi variable aux charlaMatcheada
+        charlaMatcheada = charla;
+      }
+    });
+    //A: Y la devuelvo en el return del map
+    return charlaMatcheada;
+  });
+  //A: Devuelvo la lista de charlas (objetos) que matchearon con los hashtags
+  return charlasMatcheadas;
+}
+
+async function traerCharlasDelTexto(charlasFetch) {
+  let listaHashtags = traerTodosLosHashtags();
+  listaHashtags = listaHashtags.map((anchorElement) => anchorElement.innerHTML);
+  //A: Traigo TODAS las charlas de la API
+  let res = await charlasFetch();
+  let charlasTraidasApi = await res.json();
+  //A: Paso mis charlasTraidasApi y mi listaHashtags como parametros de obtenerObjetosCharlas()
+  let charlasMatcheadas = obtenerObjetosCharlas(
+    charlasTraidasApi,
+    listaHashtags
+  );
+  //DBG: console.info("Titulos (strings) de las charlas: ", listaHashtags);
+  //DBG: console.info("Objetos de esas charlas:", charlasMatcheadas);
+  return charlasMatcheadas;
+}
+
 class TarjetaTexto extends React.Component {
   state = {
     texto: this.props.textoCharla,
@@ -47,7 +90,6 @@ class TarjetaTexto extends React.Component {
           (charlaMatcheada) => {
             let charla = charlaMatcheada;
             pushPage(navigator, charla);
-            //pushPage(navigator, charla);
           }
         );
         console.info("el que disparo el click fue: ", hashtagClicked);
@@ -59,7 +101,11 @@ class TarjetaTexto extends React.Component {
     //A: montado el componente llama a la función que crea los links
     //DBG: console.info("tarjetaTexto.js/montaje");
     //A: Paso
+    const datosProps = this.props.tarjetaTextoProps;
     this.agregarOnClickHashtags(this.props.tarjetaTextoProps);
+    //TEST
+    //traerCharlasDelTexto(datosProps.charlasFetch).then((charlas) => console.info(charlas));
+    //Resultado: un array SOLO con las charlas (objetos) de la tarjetaTexto correspondiente ej: [{titulo: #titulo1, pk: 1}, {titulo: #titulo2, pk: 2}, {titulo: #titulo3, pk: 3}]
   }
 
   componentDidUpdate(prevProps, prevState) {
