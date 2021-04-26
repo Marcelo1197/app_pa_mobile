@@ -1,6 +1,20 @@
 const { createElement } = React;
 const html = htm.bind(createElement);
 
+async function filtrarCharlaPorNombre(nombreCharla, charlasFetch) {
+  //DBG: console.log("nombreCharla que recibi:" + nombreCharla);
+  //A: Traigo todas las charlas de la API con charlasFetch
+  const charlaMatcheada = await charlasFetch()
+    .then((res) => res.json())
+    .then((charlas) =>
+      //A: Obtengo un array con la charla que quiero, matcheando el titulo de cada charla recorrida con nombreCharla
+      charlas.filter((charla) => charla.titulo == nombreCharla)
+    );
+  //DBG: console.log("charla matcheada ", charlaMatcheada);
+  //A: Como solo hay una charla con ese nombre, retorno la unica posicion de mi array que contiene la charla
+  return charlaMatcheada[0];
+}
+
 class TarjetaTexto extends React.Component {
   state = {
     texto: this.props.textoCharla,
@@ -12,8 +26,10 @@ class TarjetaTexto extends React.Component {
     return { __html: marked(this.state.textLinks) };
   }
 
-  agregarOnClickHashtags() {
-    //DBG: console.info("tarjetaTexto/agregarOnClickHashtags");
+  agregarOnClickHashtags(opciones) {
+    //A: Desestructuro los datos y funciones pasado como prop desde home.js
+    let { navigator, route, pushPage, charlasFetch } = opciones;
+    console.info("tarjetaTexto/agregarOnClickHashtags");
     //A: Traigo todos los elementos <a> que tengan la clase hashtagLink. Me devuelve una HTMLCollection de elementos <a>
     let listaHashtags = document.getElementsByClassName("hashtagLink");
     //A: Transformo la HTMLCollection a un array
@@ -23,8 +39,18 @@ class TarjetaTexto extends React.Component {
     listaHashtags.forEach((hashtagLink) => {
       //A: En vez de addEventListener, asigno el evento .onclick a cada <a>
       hashtagLink.onclick = (e) => {
-        e.preventDefault();
-        console.log("Apretaste un hashtag!");
+        //A: Guardo el nombre del hashtag clickeado
+        let hashtagClicked = e.target.innerHTML;
+        //A: Obtengo la charla (objeto) que clickee, trayendola desde la API.
+        //FIX: funcion async dentro del onclick, tarda en traer la charla
+        filtrarCharlaPorNombre(hashtagClicked, charlasFetch).then(
+          (charlaMatcheada) => {
+            let charla = charlaMatcheada;
+            pushPage(navigator, charla);
+            //pushPage(navigator, charla);
+          }
+        );
+        console.info("el que disparo el click fue: ", hashtagClicked);
       };
     });
   }
@@ -32,7 +58,8 @@ class TarjetaTexto extends React.Component {
   componentDidMount() {
     //A: montado el componente llama a la función que crea los links
     //DBG: console.info("tarjetaTexto.js/montaje");
-    this.agregarOnClickHashtags();
+    //A: Paso
+    this.agregarOnClickHashtags(this.props.tarjetaTextoProps);
   }
 
   componentDidUpdate(prevProps, prevState) {
