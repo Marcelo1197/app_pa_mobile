@@ -3,23 +3,7 @@ const html = htm.bind(createElement);
 
 import Charla from "./charla.js";
 import TarjetaTexto from "./tarjetaTexto.js";
-
-async function charlas_fetch() {
-  //U: fetch usando rest-api-token para traer las charlas
-  const res = await fetchConToken("https://si.podemosaprender.org/api/charla/");
-  return res;
-}
-
-async function charlas_sin_casuales() {
-  //U: trae charlas, excluye las que empiezan con #casual (muchas)
-  const res = await charlas_fetch();
-  const charlas = await res.json();
-  const charlasFiltradas = charlas.filter(
-    (charla) => !charla.titulo.startsWith("#casual")
-  );
-  //DBG: console.info("home.js/obtenerYfiltrarCharlas ejecutado");
-  return charlasFiltradas;
-}
+import { charlas_sin_casuales } from "../../servicios/charlas.js";
 
 class Home extends React.Component {
   state = {
@@ -93,7 +77,6 @@ class Home extends React.Component {
     let tarjetaTextoProps = {
       route,
       navigator,
-      charlasFetch: charlas_fetch,
       pushPage: this.pushPage,
     };
 
