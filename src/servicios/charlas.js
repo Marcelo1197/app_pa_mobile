@@ -12,7 +12,7 @@ async function filtrarCharlaPorNombre(nombreCharla, charlasFetch) {
   return charlaMatcheada[0];
 }
 
-function traerTodosLosHashtags() {
+function traerTodosLosHashtagsDelDOM() {
   //A: Traigo todos los elementos <a> que tengan la clase hashtagLink. Me devuelve una HTMLCollection de elementos <a>
   let listaHashtags = document.getElementsByClassName("hashtagLink");
   //A: Transformo la HTMLCollection a un array
@@ -20,39 +20,17 @@ function traerTodosLosHashtags() {
   return listaHashtags;
 }
 
-function obtenerObjetosCharlas(charlasTraidasApi, listaHashtags) {
-  //A: Mapeo cada #tituloHashtag de la lista de titulos que recibo como parametro
-  let charlasMatcheadas = listaHashtags.map((tituloHashtag) => {
-    let charlaMatcheada;
-    //A: A su vez en cada mapeo de un titulo, recorro las charlasTraidasApi que recibomo como parametro
-    charlasTraidasApi.forEach((charla) => {
-      if (charla.titulo == tituloHashtag) {
-        //A: Y en cada recorrida valido si el titulo de la charlaTraidaApi coincide con el titulo de mi listaHashtags mapeado
-        //Si coincide lo asigno a mi variable aux charlaMatcheada
-        charlaMatcheada = charla;
-      }
-    });
-    //A: Y la devuelvo en el return del map
-    return charlaMatcheada;
-  });
-  //A: Devuelvo la lista de charlas (objetos) que matchearon con los hashtags
-  return charlasMatcheadas;
-}
-
-async function traerCharlasDelTexto(charlasFetch) {
-  let listaHashtags = traerTodosLosHashtags();
-  listaHashtags = listaHashtags.map((anchorElement) => anchorElement.innerHTML);
-  //A: Traigo TODAS las charlas de la API
-  let res = await charlasFetch();
-  let charlasTraidasApi = await res.json();
-  //A: Paso mis charlasTraidasApi y mi listaHashtags como parametros de obtenerObjetosCharlas()
-  let charlasMatcheadas = obtenerObjetosCharlas(
-    charlasTraidasApi,
-    listaHashtags
+async function traerCharlasDelTexto() {
+  const listaHashtags = traerTodosLosHashtagsDelDOM().map(
+    (anchorElement) => anchorElement.innerHTML
   );
-  //DBG: console.info("Titulos (strings) de las charlas: ", listaHashtags);
-  //DBG: console.info("Objetos de esas charlas:", charlasMatcheadas);
-  return charlasMatcheadas;
+  const charlasTraidasApi = await charlas();
+  const titulosCharla = charlasTraidasApi.map((ch) => ch.titulo);
+  const charlasQueExisten = listaHashtags.filter(
+    (nombre) => titulosCharla.indexOf(nombre) > -1
+  );
+  //A: Solo charlas que existen
+  return charlasQueExisten;
 }
 
 async function charlas_fetch() {
@@ -61,15 +39,34 @@ async function charlas_fetch() {
   return res;
 }
 
-async function charlas_sin_casuales() {
+var Charlas_ = null; //U: Cacheamos las charlas, titulo => charla
+
+async function charlas() {
   //U: trae charlas, excluye las que empiezan con #casual (muchas)
+  if (Charlas_ != null) return Object.values(Charlas_);
+
   const res = await charlas_fetch();
   const charlas = await res.json();
-  const charlasFiltradas = charlas.filter(
+  Charlas_ = {};
+  charlas.forEach((ch) => {
+    Charlas_[ch.titulo] = ch;
+  });
+  return charlas;
+}
+
+async function charlas_sin_casuales() {
+  //U: trae charlas, excluye las que empiezan con #casual (muchas)
+  const lasCharlas = await charlas();
+  const charlasFiltradas = lasCharlas.filter(
     (charla) => !charla.titulo.startsWith("#casual")
   );
   //DBG: console.info("home.js/obtenerYfiltrarCharlas ejecutado");
   return charlasFiltradas;
+}
+
+async function charlaConTitulo(titulo) {
+  const lasCharlas = await charlas();
+  return Charlas_[titulo];
 }
 
 async function fetch_textosCharla(idCharla) {
@@ -109,10 +106,13 @@ async function obtenerTextosDeCharla(charla) {
   return textosConHashtagsLinks;
 }
 
+function markdownAhtml(txt) {
+  //U: Markdown a HTML para usar con dangerouslySetInnerHTML
+  return { __html: marked(txt) };
+}
+
 export {
   filtrarCharlaPorNombre,
-  traerTodosLosHashtags,
-  obtenerObjetosCharlas,
   traerCharlasDelTexto,
   charlas_fetch,
   charlas_sin_casuales,
@@ -120,4 +120,6 @@ export {
   linkParaHashtag,
   hashtagsALinks,
   obtenerTextosDeCharla,
+  markdownAhtml,
+  charlaConTitulo,
 };

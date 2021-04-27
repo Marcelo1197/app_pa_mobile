@@ -33,7 +33,7 @@ class Charla extends React.Component {
                   html`<${TarjetaTexto}
                     key=${txt.pk}
                     texto=${txt}
-                    tarjetaTextoProps=${this.props.tarjetaTextoProps}
+                    onCharlaClick=${this.props.onCharlaClick}
                   >
                   <//>`
               )}

@@ -1,59 +1,49 @@
 //INFO:
 import {
   filtrarCharlaPorNombre,
-  traerTodosLosHashtags,
-  obtenerObjetosCharlas,
-  traerCharlasDelTexto,
   charlas_fetch,
   charlas_sin_casuales,
+  markdownAhtml,
+  charlaConTitulo,
 } from "../../servicios/charlas.js";
 
 const { createElement } = React;
 const html = htm.bind(createElement);
 
+const handleHashtagClick = function (onclick) {
+  return async (e) => {
+    let hashtagClicked = e.target.innerHTML;
+    let charlaMatcheada = await charlaConTitulo(hashtagClicked);
+    onclick(charlaMatcheada);
+    console.info(
+      "el que disparo el click fue: ",
+      hashtagClicked,
+      charlaMatcheada
+    );
+  };
+};
+
 class TarjetaTexto extends React.Component {
   state = {
-    texto: this.props.texto,
+    texto: this.props.texto, //U: {texto: "", de_quien: ""}
     textLinks: this.props.texto.texto,
   };
 
-  createMarkup() {
-    return { __html: marked(this.state.textLinks) };
-  }
-
-  agregarOnClickHashtags(opciones) {
+  agregarOnClickHashtags() {
     //U: Cuando toque cualquier hashtag activa esa charla
-    let { navigator, route, pushPage, charlasFetch } = opciones;
+    const onclick = this.props.onCharlaClick;
     console.info("tarjetaTexto/agregarOnClickHashtags");
     let listaHashtags = document.getElementsByClassName("hashtagLink");
     listaHashtags = [...listaHashtags];
     //DBG: console.info(listaHashtags);
     listaHashtags.forEach((hashtagLink) => {
-      hashtagLink.onclick = (e) => {
-        let hashtagClicked = e.target.innerHTML;
-        let charlaMatcheada;
-        this.state.objetosCharla.forEach((charla) => {
-          if (charla.titulo == hashtagClicked) {
-            charlaMatcheada = charla;
-          }
-        });
-        pushPage(navigator, charlaMatcheada);
-        console.info("el que disparo el click fue: ", hashtagClicked);
-      };
+      hashtagLink.onclick = handleHashtagClick(onclick);
     });
   }
 
   componentDidMount() {
     //DBG: console.info("tarjetaTexto.js/montaje");
-    const datosProps = this.props.tarjetaTextoProps;
-    const vincularHashtagConCharla = async () => {
-      traerCharlasDelTexto(charlas_fetch)
-        .then((charlas) => this.setState({ objetosCharla: charlas }))
-        .then(() => {
-          this.agregarOnClickHashtags(this.props.tarjetaTextoProps);
-        });
-    };
-    vincularHashtagConCharla();
+    this.agregarOnClickHashtags();
 
     //Resultado: un array SOLO con las charlas (objetos) de la tarjetaTexto correspondiente ej: [{titulo: #titulo1, pk: 1}, {titulo: #titulo2, pk: 2}, {titulo: #titulo3, pk: 3}]
   }
@@ -70,6 +60,11 @@ class TarjetaTexto extends React.Component {
     }
   }
 
+  markdownAhtml(txt) {
+    //U: Markdown a HTML para usar con dangerouslySetInnerHTML
+    return { __html: marked(txt) };
+  }
+
   render() {
     return html`
       <${Ons.Card}>
@@ -78,7 +73,9 @@ class TarjetaTexto extends React.Component {
             <h4><b>Autor: ${this.state.texto.de_quien.username}</b></h4>
           </div>
           <div className="list-item__title">
-            <p dangerouslySetInnerHTML=${this.createMarkup()}></p>
+            <p
+              dangerouslySetInnerHTML=${markdownAhtml(this.state.textLinks)}
+            ></p>
           </div>
           <div>
             <p>Creado: ${this.state.texto.fh_creado}</p>

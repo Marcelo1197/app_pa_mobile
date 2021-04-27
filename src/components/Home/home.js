@@ -73,12 +73,6 @@ class Home extends React.Component {
   renderPage = (route, navigator) => {
     //U: la pagina que pida la RUTA (no state!)
     console.log("renderPage ", route);
-    //A: Creo un objeto literal para agrupar todos los props en uno solo
-    let tarjetaTextoProps = {
-      route,
-      navigator,
-      pushPage: this.pushPage,
-    };
 
     if (route.title == "Charlas") {
       return this.renderListaDeCharlas(route, navigator);
@@ -91,7 +85,7 @@ class Home extends React.Component {
         >
           <${Charla}
             idCharla=${idCharla}
-            tarjetaTextoProps=${tarjetaTextoProps}
+            onCharlaClick=${(charla) => this.pushPage(navigator, charla)}
           ><//>
         <//>
       `;
