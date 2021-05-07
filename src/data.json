@@ -1,0 +1,160 @@
+{
+  "results": [  
+    {
+      "pk": 348,
+      "de_quien": {
+          "username": "Marcelo1197",
+          "pk": 97
+      },
+      "fh_creado": "2021-05-04T01:39:21.334632Z",
+      "fh_editado": "2021-05-04T01:39:21.334632Z",
+      "texto": "Practicar React.js haciendo una app chiquita, focalizandome en aprender.",
+      "tiempo": "01:00:00",
+      "necesito": [
+        {
+          "valor": true,
+          "recurso": "pc"
+        },
+        { 
+          "valor": true,
+          "recurso": "internet"
+        },
+        {
+          "valor": true,
+          "recurso": "pensar"
+        }
+      ],
+      "urgencia": 10
+    },
+    {
+      "pk": 354,
+      "de_quien": {
+          "username": "Marcelo1197",
+          "pk": 97
+      },
+      "fh_creado": "2021-05-04T05:11:49.870975Z",
+      "fh_editado": "2021-05-04T05:11:49.870975Z",
+      "texto": "Crear una API Rest con NodeJS",
+      "tiempo": "01:00:00",
+      "necesito": [
+        {
+          "valor": true,
+          "recurso": "pc"
+        },
+        { 
+          "valor": true,
+          "recurso": "internet"
+        },
+        {
+          "valor": true,
+          "recurso": "pensar"
+        }
+      ],
+      "urgencia": 10
+    },
+    {
+      "pk": 355,
+      "de_quien": {
+          "username": "Marcelo1197",
+          "pk": 97
+      },
+      "fh_creado": "2021-05-04T06:00:02.612958Z",
+      "fh_editado": "2021-05-04T06:00:02.612958Z",
+      "texto": "Hacer ejercicio 1 hora mínimo",
+      "tiempo": "01:00:00",
+      "necesito": [
+        {
+          "valor": false,
+          "recurso": "pc"
+        },
+        { 
+          "valor": false,
+          "recurso": "internet"
+        },
+        {
+          "valor": false,
+          "recurso": "pensar"
+        }
+      ],
+      "urgencia": 5
+    },
+    {
+      "pk": 356,
+      "de_quien": {
+          "username": "Marcelo1197",
+          "pk": 97
+      },
+      "fh_creado": "2021-05-04T14:57:28.881565Z",
+      "fh_editado": "2021-05-04T14:57:28.881565Z",
+      "texto": "Practicar traducir una canción para la #bandaInglés",
+      "tiempo": "00:10:00",
+      "necesito": [
+        {
+          "valor": false,
+          "recurso": "pc"
+        },
+        { 
+          "valor": false,
+          "recurso": "internet"
+        },
+        {
+          "valor": true,
+          "recurso": "pensar"
+        }
+      ],
+      "urgencia": 1
+    },
+    {
+      "pk": 357,
+      "de_quien": {
+          "username": "Marcelo1197",
+          "pk": 97
+      },
+      "fh_creado": "2021-05-04T15:51:38.845948Z",
+      "fh_editado": "2021-05-04T15:51:38.845948Z",
+      "texto": "Leer el libro de Scrum",
+      "tiempo": "00:20:00",
+      "necesito": [
+        {
+          "valor": false,
+          "recurso": "pc"
+        },
+        { 
+          "valor": false,
+          "recurso": "internet"
+        },
+        {
+          "valor": true,
+          "recurso": "pensar"
+        }
+      ],
+      "urgencia": 5
+    },
+    {
+      "pk": 354,
+      "de_quien": {
+          "username": "Marcelo1197",
+          "pk": 97
+      },
+      "fh_creado": "2021-05-04T05:13:49.870975Z",
+      "fh_editado": "2021-05-04T05:13:49.870975Z",
+      "texto": "Leer al menos 10 paginas de un libro",
+      "tiempo": "00:30:00",
+      "necesito": [
+        {
+          "valor": false,
+          "recurso": "pc"
+        },
+        { 
+          "valor": false,
+          "recurso": "internet"
+        },
+        {
+          "valor": true,
+          "recurso": "pensar"
+        }
+      ],
+      "urgencia": 1
+    }
+  ]
+}

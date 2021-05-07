@@ -3,5 +3,6 @@ const render = ReactDOM.render;
 const html = htm.bind(createElement);
 
 import App from "./app.js";
+import MyTodo from "./components/MyTodo/MyTodo.js";
 
-render(html`<${App} />`, document.getElementById("App"));
+render(html`<${MyTodo} />`, document.getElementById("App"));
